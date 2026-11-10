@@ -2,18 +2,15 @@
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const flights = new Set();
 const arrivals = new WeakMap();
-// Preparar as duas figuras pequenas antes do primeiro clique, sem baixar fotos.
-if (!motion.matches) {
-  for (const flavor of ['morango', 'maracuja']) {
-    const image = new Image();
-    image.src = `./assets/images/cone-flight-${flavor}.svg`;
-    image.decode().catch(() => {});
-  }
-}
-
-function coneIcon(flavor) {
-  const variant = flavor === 'maracuja' ? 'maracuja' : 'morango';
-  return `<img src="./assets/images/cone-flight-${variant}.svg" alt="" width="72" height="108" decoding="async" draggable="false">`;
+function conePhoto(article) {
+  // Reutilizar a foto real já carregada no catálogo, inclusive o sabor.
+  const photo = article.querySelector('.photo-slide img');
+  const image = new Image(72, 108);
+  image.src = photo.currentSrc || photo.src;
+  image.alt = '';
+  image.decoding = 'async';
+  image.draggable = false;
+  return image;
 }
 
 export function cancelCartFlights() {
@@ -42,16 +39,16 @@ export function flyToCart(article, cartButton, flavor) {
   cone.className = 'flying-cone';
   cone.dataset.flavor = flavor;
   cone.setAttribute('aria-hidden', 'true');
-  cone.innerHTML = coneIcon(flavor);
+  cone.append(conePhoto(article));
   document.body.append(cone);
   const frames = Array.from({ length: 33 }, (_, i) => {
     const t = i / 32;
     const x = (1-t)**2*sx + 2*(1-t)*t*cx + t*t*tx;
     const y = (1-t)**2*sy + 2*(1-t)*t*cy + t*t*ty;
     const scale = t < .7 ? 1 + Math.sin(t / .7 * Math.PI) * .16 : 1 - (t - .7) / .3 * .78;
-    return { offset: t, transform: `translate3d(${x}px,${y}px,0) rotate(${-25+385*t}deg) scale(${scale})`, opacity: t > .94 ? (1-t)/.06 : 1 };
+    return { offset: t, transform: `translate3d(${x}px,${y}px,0) rotate(${-12+44*t}deg) scale(${scale})`, opacity: t > .94 ? (1-t)/.06 : 1 };
   });
-  const flight = cone.animate(frames, { duration: 2400, easing: 'cubic-bezier(.25,.1,.35,1)', fill: 'forwards' });
+  const flight = cone.animate(frames, { duration: 850, easing: 'cubic-bezier(.25,.1,.35,1)', fill: 'forwards' });
   flights.add(flight);
   const cleanup = () => { flights.delete(flight); cone.remove(); };
   flight.finished.then(() => {
@@ -63,7 +60,7 @@ export function flyToCart(article, cartButton, flavor) {
       { transform: 'scale(1.16) rotate(-9deg)', offset: .35 },
       { transform: 'scale(.96) rotate(6deg)', offset: .7 },
       { transform: 'scale(1) rotate(0deg)' }
-    ], { duration: 480, easing: 'ease-out' });
+    ], { duration: 280, easing: 'ease-out' });
     arrivals.set(cartButton, arrival);
   }, cleanup);
 }
