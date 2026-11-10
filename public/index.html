@@ -37,7 +37,15 @@
       "name": "Q’Cone",
       "url": "https://q-cone.pages.dev/",
       "logo": "https://q-cone.pages.dev/favicon.svg",
-      "image": "https://q-cone.pages.dev/assets/images/qcone-social.jpg"
+      "image": "https://q-cone.pages.dev/assets/images/qcone-social.jpg",
+      "areaServed": {
+        "@type": "City",
+        "name": "Paraguaçu",
+        "containedInPlace": {
+          "@type": "AdministrativeArea",
+          "name": "MG"
+        }
+      }
     },
     {
       "@type": "WebSite",
@@ -155,6 +163,9 @@
   <script src="./config.js" defer></script>
   <script src="./catalog-template.js" defer></script>
   <script src="./app.js" defer></script>
+  <link rel="stylesheet" href="/delivery.css">
+  <script src="/backend-config.js" defer></script>
+  <script type="module" src="/assets/js/delivery.js"></script>
 </head>
 <body>
   <div class="brand-intro" aria-hidden="true">

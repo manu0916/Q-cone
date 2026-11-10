@@ -1,6 +1,8 @@
 # Q’Cone
 
-Site estático com HTML, CSS e JavaScript. Inclui os sabores morango e maracujá, cinco fotos por sabor, ondas animadas, seleção de quantidade e resumo da encomenda.
+Delivery com Supabase: carrinho sem conta, checkout com e-mail/senha, endereços salvos, histórico e painel `/admin/`. Veja [operação do backend](docs/backend.md). Taxa combinada pelo WhatsApp e pagamento na entrega.
+
+Build: `npm ci && npm run build`. Testes: `npm test`. Saída Cloudflare: `public`.
 
 ## Publicar no Cloudflare Pages usando Git
 

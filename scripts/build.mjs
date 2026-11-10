@@ -1,0 +1,13 @@
+import { build } from 'esbuild';
+import { execFileSync } from 'node:child_process';
+import { mkdir } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+await mkdir('public/assets/js', { recursive: true });
+await build({ entryPoints: { delivery: 'src/delivery.js', admin: 'src/admin.js' }, outdir: 'public/assets/js', bundle: true, minify: true, format: 'esm', target: ['es2022'], legalComments: 'eof', sourcemap: false });
+execFileSync(process.execPath, ['scripts/build-seo.mjs'], { stdio: 'inherit' });
+const html = await readFile('public/index.html','utf8');
+const hashes = [...html.matchAll(/<script\b(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)].map(m => `'sha256-${createHash('sha256').update(m[1]).digest('base64')}'`).join(' ');
+const headers = await readFile('public/_headers','utf8');
+await writeFile('public/_headers', headers.replace(/script-src [^;]+;/, `script-src 'self' ${hashes};`));
+execFileSync(process.execPath, ['scripts/check-seo.mjs'], { stdio: 'inherit' });

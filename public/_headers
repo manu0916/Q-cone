@@ -1,6 +1,13 @@
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-sXYAOS9U1xj7OoWJxgneqDsJNkAq4G7N9gdkFoSY2DE='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://beolpmiezusawbkzjlez.supabase.co wss://beolpmiezusawbkzjlez.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+
+/admin/*
+  Cache-Control: no-store
+  X-Robots-Tag: noindex, nofollow
 
 /assets/images/*
   Cache-Control: public, max-age=86400

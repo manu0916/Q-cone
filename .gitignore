@@ -3,3 +3,9 @@ Thumbs.db
 node_modules/
 .env
 .env.*
+.superdesign/tmp/
+
+.wrangler/
+supabase/.temp/
+supabase/.branches/
+debug.log

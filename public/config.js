@@ -3,6 +3,7 @@ window.QCONE_CONFIG = {
   "name": "Q’Cone",
   "whatsapp": "",
   "instagram": "",
+  "whatsappUrl": "https://wa.me/qr/L77USZRW5KKQL1",
   "products": [
     {
       "id": "morango",
@@ -87,7 +88,7 @@ window.QCONE_CONFIG = {
   "seo": {
     "title": "Q’Cone | Cones de morango e maracujá por encomenda",
     "description": "Conheça os cones cravejados da Q’Cone: morango e maracujá com brigadeiro branco, casquinha crocante e cobertura de chocolate branco. Monte sua encomenda.",
-    "city": "",
-    "region": ""
+    "city": "Paraguaçu",
+    "region": "MG"
   }
 };
