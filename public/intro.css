@@ -1,6 +1,6 @@
-/* Ondas vetoriais: expandem ao redor da marca e abrem o catálogo pelo centro. */
+/* Uma superfície limitada à viewport, sem máscaras SVG ou camadas gigantes. */
 .brand-intro {
-  --intro-duration: 3.6s;
+  --intro-duration: 3s;
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -9,7 +9,7 @@
   overflow: hidden;
   isolation: isolate;
   pointer-events: none;
-  animation: intro-finish 3.84s linear both;
+  animation: intro-finish var(--intro-duration) linear both;
 }
 .brand-intro::before {
   content: "";
@@ -19,51 +19,29 @@
   background: #a51b4b;
   animation: intro-backdrop var(--intro-duration) linear both;
 }
-.intro-wave {
+.intro-waves {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 180vmax;
-  height: 180vmax;
-  max-width: none;
-  overflow: visible;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: -1;
-  animation: intro-wave-orbit var(--intro-duration) cubic-bezier(.45, 0, .25, 1) both;
 }
-.intro-wave--rose { color: #e73568; --wave-turn: 115deg; }
-.intro-wave--red { color: #f0443e; --wave-turn: 145deg; animation-delay: .12s; }
-.intro-wave--cream { color: #f8e9bd; --wave-turn: 175deg; animation-delay: .24s; }
-.intro-wave-cutout {
-  transform-origin: 0 0;
-  animation: intro-wave-open var(--intro-duration) cubic-bezier(.55, 0, .3, 1) both;
-}
-/* A camada de cima abre primeiro, deixando os aros coloridos visíveis na saída. */
-.intro-wave--rose .intro-wave-cutout { animation-delay: .24s; }
-.intro-wave--red .intro-wave-cutout { animation-delay: .12s; }
 .brand-intro > img {
   position: relative;
   width: min(76vw, 400px, 62svh);
   height: auto;
   aspect-ratio: 1;
   object-fit: contain;
-  clip-path: circle(49.8%);
+  border-radius: 50%;
   animation: brand-arrive var(--intro-duration) cubic-bezier(.22, 1, .36, 1) both;
 }
 .brand-logo { display: inline-flex; align-items: center; min-width: 56px; min-height: 56px; }
 .brand-logo > img { width: 56px; height: 56px; object-fit: contain; border-radius: 50%; }
-body > .site { animation: catalog-arrive 3.84s cubic-bezier(.16, 1, .3, 1) both; }
+/* O catálogo fica pronto por baixo; não criar uma textura da página inteira. */
+body > .site { animation: none; }
+body:not(.intro-skipped) .flavor-wave { animation-play-state: paused; }
 .intro-skipped .brand-intro { display: none; }
 .intro-skipped > .site { animation: none; }
-@keyframes intro-wave-orbit {
-  0% { transform: translate(-50%, -50%) rotate(-35deg) scale(.035); }
-  18% { transform: translate(-50%, -50%) rotate(0deg) scale(.2); }
-  48% { transform: translate(-50%, -50%) rotate(45deg) scale(1); }
-  100% { transform: translate(-50%, -50%) rotate(var(--wave-turn)) scale(1.12); }
-}
-@keyframes intro-wave-open {
-  0%, 44% { transform: scale(0); }
-  100% { transform: scale(1.5); }
-}
 @keyframes brand-arrive {
   0% { opacity: 0; transform: translateY(12px) scale(.86); }
   18%, 40% { opacity: 1; transform: translateY(0) scale(1); }
@@ -77,9 +55,8 @@ body > .site { animation: catalog-arrive 3.84s cubic-bezier(.16, 1, .3, 1) both;
   0%, 99.9% { visibility: visible; }
   100% { visibility: hidden; }
 }
-@keyframes catalog-arrive {
-  0%, 43% { opacity: 0; transform: translateY(16px); }
-  72%, 100% { opacity: 1; transform: translateY(0); }
+@media (max-width: 767px) {
+  .flavor-wave-back, .flavor-wave-middle { animation: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .brand-intro { display: none; }
