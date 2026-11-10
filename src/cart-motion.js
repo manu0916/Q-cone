@@ -2,11 +2,18 @@
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const flights = new Set();
 const arrivals = new WeakMap();
-function conePhoto(article) {
-  // Reutilizar a foto real já carregada no catálogo, inclusive o sabor.
-  const photo = article.querySelector('.photo-slide img');
+const cutoutPath = flavor => `./assets/images/cone-flight-${flavor === 'maracuja' ? 'maracuja' : 'morango'}.webp`;
+// Recortes pequenos, com alpha, já preparados antes do primeiro clique.
+if (!motion.matches) {
+  for (const flavor of ['morango', 'maracuja']) {
+    const image = new Image();
+    image.src = cutoutPath(flavor);
+    image.decode().catch(() => {});
+  }
+}
+function conePhoto(flavor) {
   const image = new Image(72, 108);
-  image.src = photo.currentSrc || photo.src;
+  image.src = cutoutPath(flavor);
   image.alt = '';
   image.decoding = 'async';
   image.draggable = false;
@@ -39,7 +46,7 @@ export function flyToCart(article, cartButton, flavor) {
   cone.className = 'flying-cone';
   cone.dataset.flavor = flavor;
   cone.setAttribute('aria-hidden', 'true');
-  cone.append(conePhoto(article));
+  cone.append(conePhoto(flavor));
   document.body.append(cone);
   const frames = Array.from({ length: 33 }, (_, i) => {
     const t = i / 32;
