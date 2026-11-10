@@ -82,7 +82,7 @@ const content = `
       </section>
 `;
 let html = await readFile(path.join(publicDir, 'index.html'), 'utf8');
-for (const [name, value] of [['head', head], ['catalog', catalog], ['content', content]]) {
+for (const [name, value] of [['head', head], ['catalog', catalog], ['content', '']]) {
   const marker = new RegExp(`(<!-- seo:${name}:start -->)[\\s\\S]*?(<!-- seo:${name}:end -->)`);
   if (!marker.test(html)) throw new Error(`Marcador ausente: ${name}`);
   html = html.replace(marker, (_, start, end) => `${start}${value}${end}`);
