@@ -15,7 +15,7 @@
 @media(prefers-reduced-motion:reduce){.flying-cone{display:none}}
 .header{height:72px;min-height:72px;flex-wrap:nowrap;padding-block:12px;gap:12px}
 .header>span{order:-1}
-.header .brand-logo{display:inline-flex;align-items:center;justify-content:center;gap:8px;flex:none;width:auto;height:44px;min-width:44px;min-height:44px;margin-left:auto;padding:0 10px 0 2px;border:0;border-radius:999px;background:transparent;cursor:pointer}
+.header .brand-logo{display:inline-flex;align-items:center;justify-content:center;gap:8px;flex:none;width:auto;height:44px;min-width:44px;min-height:44px;margin-left:auto;padding:0 2px 0 10px;border:0;border-radius:999px;background:transparent;cursor:pointer}
 .header .brand-logo>span{font:500 13px/1.2 Arial,Helvetica,sans-serif;letter-spacing:0;color:var(--text,#312b2c);white-space:nowrap}
 .header .brand-logo>img{width:40px;height:40px}
 .header .brand-logo:hover{background:#f8e4e8}
