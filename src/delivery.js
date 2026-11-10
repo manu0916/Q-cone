@@ -1,6 +1,6 @@
 import { db, rpc, getAccount, accountAction, notify, busy, setupAuth, openDialog, wireDialog, e } from './client.js';
 import { CART_KEY, LEGAL_VERSION, readCart, sanitizeCart, cartTotal, money, PAYMENT_LABELS, STATUS_LABELS, validateCustomer, addressText } from './domain.js';
-import { flyToCart, cancelCartFlights } from './cart-motion.js';
+import { flyToCart, cancelCartFlights, renderCartLoad } from './cart-motion.js';
 import { setupCustomerCenter } from './customer-center.js';
 import { field, PHONE_ATTRIBUTES, setupInputFormats } from './form-fields.js';
 const config = window.QCONE_CONFIG;
@@ -20,11 +20,11 @@ const authDialog=dialog('auth-dialog','Entre para continuar');
 authDialog.setAttribute('aria-labelledby','auth-title');authDialog.querySelector('h2').id='auth-title'; authDialog.querySelector('#auth-dialog-body').id='auth-content';
 const auth=setupAuth({onLogin:async()=>{ account=await getAccount(); notify('Você entrou na sua conta.'); },onLogout:()=>{account=null;accountDialog.close();checkout.close();ordersDialog.close();}});
 const nav=document.createElement('nav');nav.className='delivery-nav';nav.setAttribute('aria-label','Compras');
-nav.innerHTML='<button type="button" class="bag-button cart-button" id="open-cart" aria-label="Abrir carrinho, 0 produtos" aria-haspopup="dialog" aria-controls="cart"><svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h2l2.4 12h12.2L21 6H5"/><path d="M7 15l-1 3h13"/><circle cx="8" cy="21" r="1"/><circle cx="18" cy="21" r="1"/></svg><span id="cart-count" class="cart-badge" aria-hidden="true">0</span></button>';
+nav.innerHTML='<button type="button" class="bag-button cart-button" id="open-cart" aria-label="Abrir carrinho, 0 produtos" aria-haspopup="dialog" aria-controls="cart"><span class="cart-load" aria-hidden="true"></span><svg class="cart-frame" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h2l2.4 12h12.2L21 6H5"/><path d="M7 15l-1 3h13"/><circle cx="8" cy="21" r="1"/><circle cx="18" cy="21" r="1"/></svg><span id="cart-count" class="cart-badge" aria-hidden="true">0</span></button>';
 document.querySelector('.header').append(nav);
 document.querySelector('.footer').insertAdjacentHTML('beforeend','<a href="/privacidade/">Privacidade</a><a href="/termos/">Termos</a><a href="https://wa.me/qr/L77USZRW5KKQL1" target="_blank" rel="noopener">Atendimento</a><a href="/admin/">Admin</a>');
 const storeInfo=document.createElement('p');storeInfo.className='store-info';storeInfo.setAttribute('role','status');document.querySelector('main').prepend(storeInfo);
-function updateCartCount(){const count=cart.reduce((a,i)=>a+i.quantity,0);document.querySelector('#cart-count').textContent=count;document.querySelector('#open-cart').setAttribute('aria-label',`Abrir carrinho, ${count} ${count===1?'produto':'produtos'}`);}
+function updateCartCount(){renderCartLoad(document.querySelector('#open-cart'),cart);const count=cart.reduce((a,i)=>a+i.quantity,0);document.querySelector('#cart-count').textContent=count;document.querySelector('#open-cart').setAttribute('aria-label',`Abrir carrinho, ${count} ${count===1?'produto':'produtos'}`);}
 function persist(){cart=sanitizeCart(cart,products.map(p=>p.id));try{localStorage.setItem(CART_KEY,JSON.stringify(cart));}catch{notify('Seu navegador não permite salvar a sacola. Ela ficará disponível nesta visita.');}updateCartCount();orderKey=null;}
 function renderCart(){
   const body=cartDialog.querySelector('#cart-body');

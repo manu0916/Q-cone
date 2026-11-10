@@ -3,6 +3,33 @@ const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const flights = new Set();
 const arrivals = new WeakMap();
 const cutoutPath = flavor => `./assets/images/cone-flight-${flavor === 'maracuja' ? 'maracuja' : 'morango'}.webp`;
+
+export function renderCartLoad(cartButton, cart) {
+  const load = cartButton.querySelector('.cart-load');
+  if (!load) return;
+  // Mostrar os sabores presentes, mesmo quando um deles tem muitas unidades.
+  // O contador representa a quantidade exata; o ícone comporta até cinco cones.
+  const remaining = cart.map(item => ({ flavor: item.product_id, quantity: item.quantity }));
+  const visible = [];
+  while (visible.length < 5 && remaining.some(item => item.quantity > 0)) {
+    for (const item of remaining) {
+      if (item.quantity > 0 && visible.length < 5) {
+        visible.push(item.flavor);
+        item.quantity--;
+      }
+    }
+  }
+  const fragment = document.createDocumentFragment();
+  visible.forEach((flavor, index) => {
+    const image = conePhoto(flavor);
+    image.dataset.flavor = flavor;
+    const position = visible.length === 1 ? .5 : index / (visible.length - 1);
+    image.style.left = `${position * 14}px`;
+    image.style.transform = `rotate(${(position - .5) * 22}deg)`;
+    fragment.append(image);
+  });
+  load.replaceChildren(fragment);
+}
 // Recortes pequenos, com alpha, já preparados antes do primeiro clique.
 if (!motion.matches) {
   for (const flavor of ['morango', 'maracuja']) {
