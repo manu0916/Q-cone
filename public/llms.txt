@@ -1,0 +1,28 @@
+# Q’Cone
+
+> Conheça os cones cravejados da Q’Cone: morango e maracujá com brigadeiro branco, casquinha crocante e cobertura de chocolate branco. Monte sua encomenda.
+
+## Fonte oficial
+- [Catálogo e encomendas](https://q-cone.pages.dev/): sabores, preços e orientações de pedido.
+
+## Produtos
+- Morango cravejado: R$ 14,00 por unidade. Casquinha crocante com brigadeiro branco e geleia de morango. Cobertura de chocolate branco com pedaços de caramelo vermelho.
+- Maracujá cravejado: R$ 14,00 por unidade. Casquinha crocante com brigadeiro branco e polpa de maracujá. Cobertura de chocolate branco com pedaços de caramelo amarelo.
+
+## Encomendas
+### Quais são os sabores da Q’Cone?
+Os sabores são morango cravejado e maracujá cravejado. As duas opções têm casquinha crocante, brigadeiro branco e cobertura de chocolate branco.
+
+### Quanto custa cada cone?
+Morango cravejado: R$ 14,00 por unidade. Maracujá cravejado: R$ 14,00 por unidade.
+
+### Como encomendar?
+Escolha o sabor e a quantidade no catálogo. Abra o resumo, copie a mensagem do pedido e envie pelo direct da Q’Cone. A encomenda fica confirmada depois da resposta do atendimento.
+
+### Como combinar entrega, retirada e pagamento?
+A data, a entrega ou retirada e a forma de pagamento são combinadas no atendimento. O total mostrado no catálogo corresponde aos produtos.
+
+### Onde consultar ingredientes e alergênicos?
+As descrições do catálogo apresentam os principais ingredientes. Antes de encomendar, consulte o atendimento sobre a composição completa, alergênicos e possíveis restrições alimentares.
+
+Os valores são dos produtos. Consulte o atendimento para confirmar disponibilidade, data, entrega ou retirada e pagamento.
