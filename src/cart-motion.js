@@ -2,14 +2,22 @@
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const flights = new Set();
 const arrivals = new WeakMap();
+const cartLoads = new WeakMap();
+const pendingLoads = new Map();
 const cutoutPath = flavor => `./assets/images/cone-flight-${flavor === 'maracuja' ? 'maracuja' : 'morango'}.webp`;
 
-export function renderCartLoad(cartButton, cart) {
+export function renderCartLoad(cartButton, cart = cartLoads.get(cartButton) || []) {
+  cartLoads.set(cartButton, cart.map(item => ({ ...item })));
   const load = cartButton.querySelector('.cart-load');
   if (!load) return;
   // Mostrar os sabores presentes, mesmo quando um deles tem muitas unidades.
   // O contador representa a quantidade exata; o ícone comporta até cinco cones.
   const remaining = cart.map(item => ({ flavor: item.product_id, quantity: item.quantity }));
+  for (const pending of pendingLoads.values()) {
+    if (pending.cartButton !== cartButton) continue;
+    const item = remaining.find(item => item.flavor === pending.flavor);
+    if (item) item.quantity = Math.max(0, item.quantity - pending.quantity);
+  }
   const visible = [];
   while (visible.length < 5 && remaining.some(item => item.quantity > 0)) {
     for (const item of remaining) {
@@ -24,8 +32,9 @@ export function renderCartLoad(cartButton, cart) {
     const image = conePhoto(flavor);
     image.dataset.flavor = flavor;
     const position = visible.length === 1 ? .5 : index / (visible.length - 1);
-    image.style.left = `${position * 14}px`;
-    image.style.transform = `rotate(${(position - .5) * 22}deg)`;
+    image.style.left = `${3 + position * 4}px`;
+    image.style.bottom = `${index % 3 * 2}px`;
+    image.style.transform = `rotate(${55 + position * 20}deg)`;
     fragment.append(image);
   });
   load.replaceChildren(fragment);
@@ -53,12 +62,28 @@ export function cancelCartFlights() {
 
 function cancelFlight(flight) {
   flight.cancel();
-  flight.effect?.target?.remove();
-  flights.delete(flight);
+  settleFlight(flight);
 }
 
-export function flyToCart(article, cartButton, flavor) {
+function settleFlight(flight) {
+  flight.effect?.target?.remove();
+  flights.delete(flight);
+  const pending = pendingLoads.get(flight);
+  if (pending) {
+    pendingLoads.delete(flight);
+    renderCartLoad(pending.cartButton);
+  }
+}
+
+export function flyToCart(article, cartButton, flavor, quantity = 1) {
   if (motion.matches || document.hidden || !Element.prototype.animate) return;
+  // Adições rápidas do mesmo sabor viajam juntas e aparecem só nessa chegada.
+  const pending = [...pendingLoads.values()].find(item => item.cartButton === cartButton && item.flavor === flavor);
+  if (pending) {
+    pending.quantity += quantity;
+    renderCartLoad(cartButton);
+    return;
+  }
   // Cliques rápidos continuam adicionando normalmente, sem acumular figuras.
   if (flights.size >= 2) cancelFlight(flights.values().next().value);
   const source = article.querySelector('.order-cta').getBoundingClientRect();
@@ -84,7 +109,9 @@ export function flyToCart(article, cartButton, flavor) {
   });
   const flight = cone.animate(frames, { duration: 850, easing: 'cubic-bezier(.25,.1,.35,1)', fill: 'forwards' });
   flights.add(flight);
-  const cleanup = () => { flights.delete(flight); cone.remove(); };
+  pendingLoads.set(flight, { cartButton, flavor, quantity });
+  renderCartLoad(cartButton);
+  const cleanup = () => settleFlight(flight);
   flight.finished.then(() => {
     cleanup();
     if (motion.matches || document.hidden) return;
