@@ -148,14 +148,20 @@
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./editorial.css">
+  <link rel="preload" as="image" href="./assets/images/qcone-logo.jpg">
+  <link rel="stylesheet" href="./intro.css">
+  <script src="./intro.js" defer></script>
   <script src="./config.js" defer></script>
   <script src="./catalog-template.js" defer></script>
   <script src="./app.js" defer></script>
 </head>
 <body>
+  <div class="brand-intro" aria-hidden="true">
+    <img src="./assets/images/qcone-logo.jpg" alt="" width="1254" height="1254" fetchpriority="high" decoding="async">
+  </div>
   <div class="site">
     <header class="header">
-      <a class="logo" href="#inicio" aria-label="Q’Cone, início">Q’Cone</a>
+      <a class="logo brand-logo" href="#inicio" aria-label="Q’Cone, início"><img src="./assets/images/qcone-logo.jpg" alt="Q’Cone" width="56" height="56"></a>
       <span>Cones por encomenda</span>
     </header>
     <main id="inicio">
