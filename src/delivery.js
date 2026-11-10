@@ -10,11 +10,16 @@ function dialog(id,title) {
   d.setAttribute('aria-labelledby',`${id}-title`); document.body.append(d); wireDialog(d); return d;
 }
 const cartDialog=dialog('cart','Seu carrinho'), checkout=dialog('checkout','Finalizar pedido'), accountDialog=dialog('account','Minha conta'), ordersDialog=dialog('orders','Meus pedidos');
+const customerCenter=dialog('customer-center','Central do cliente');
+customerCenter.querySelector('#customer-center-body').innerHTML=`<p class="muted">Tudo sobre sua conta e seus pedidos em um só lugar.</p><nav class="customer-center-actions" aria-label="Central do cliente"><button type="button" class="customer-center-action" id="my-account" aria-haspopup="dialog" aria-controls="account"><span><strong>Minha conta</strong><span>Seus dados e endereços salvos</span></span><span aria-hidden="true">↗</span></button><button type="button" class="customer-center-action" id="my-orders" aria-haspopup="dialog" aria-controls="orders"><span><strong>Meus pedidos</strong><span>Acompanhe seus pedidos</span></span><span aria-hidden="true">↗</span></button></nav>`;
+const customerCenterButton=document.querySelector('#open-customer-center');
+customerCenterButton.onclick=()=>{openDialog(customerCenter);customerCenterButton.setAttribute('aria-expanded','true');};
+customerCenter.addEventListener('close',()=>customerCenterButton.setAttribute('aria-expanded','false'));
 const authDialog=dialog('auth-dialog','Entre para continuar');
 authDialog.setAttribute('aria-labelledby','auth-title');authDialog.querySelector('h2').id='auth-title'; authDialog.querySelector('#auth-dialog-body').id='auth-content';
 const auth=setupAuth({onLogin:async()=>{ account=await getAccount(); notify('Você entrou na sua conta.'); },onLogout:()=>{account=null;accountDialog.close();checkout.close();ordersDialog.close();}});
 const nav=document.createElement('nav');nav.className='delivery-nav';nav.setAttribute('aria-label','Compras');
-nav.innerHTML='<button class="text-button" id="my-account">Minha conta</button><button class="text-button" id="my-orders">Meus pedidos</button><button type="button" class="bag-button cart-button" id="open-cart" aria-label="Abrir carrinho, 0 produtos" aria-haspopup="dialog" aria-controls="cart"><svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h2l2.4 12h12.2L21 6H5"/><path d="M7 15l-1 3h13"/><circle cx="8" cy="21" r="1"/><circle cx="18" cy="21" r="1"/></svg><span id="cart-count" class="cart-badge" aria-hidden="true">0</span></button>';
+nav.innerHTML='<button type="button" class="bag-button cart-button" id="open-cart" aria-label="Abrir carrinho, 0 produtos" aria-haspopup="dialog" aria-controls="cart"><svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h2l2.4 12h12.2L21 6H5"/><path d="M7 15l-1 3h13"/><circle cx="8" cy="21" r="1"/><circle cx="18" cy="21" r="1"/></svg><span id="cart-count" class="cart-badge" aria-hidden="true">0</span></button>';
 document.querySelector('.header').append(nav);
 document.querySelector('.footer').insertAdjacentHTML('beforeend','<a href="/privacidade/">Privacidade</a><a href="/termos/">Termos</a><a href="https://wa.me/qr/L77USZRW5KKQL1" target="_blank" rel="noopener">Atendimento</a><a href="/admin/">Admin</a>');
 const storeInfo=document.createElement('p');storeInfo.className='store-info';storeInfo.setAttribute('role','status');document.querySelector('main').prepend(storeInfo);
@@ -60,6 +65,7 @@ async function showOrders(){const result=await rpc('qcone_orders',{action:'list'
   ordersDialog.querySelector('#refresh-orders').onclick=()=>showOrders().catch(err=>notify(err.message,true));ordersDialog.querySelector('#orders-prev').onclick=()=>{ordersOffset=Math.max(0,ordersOffset-20);showOrders().catch(err=>notify(err.message,true));};ordersDialog.querySelector('#orders-next').onclick=()=>{ordersOffset+=20;showOrders().catch(err=>notify(err.message,true));};
   ordersDialog.querySelectorAll('[data-cancel]').forEach(b=>b.onclick=()=>{if(confirm('Cancelar este pedido?'))busy(b,async()=>{await rpc('qcone_orders',{action:'cancel',payload:{id:b.dataset.cancel}});await showOrders();});});openDialog(ordersDialog);
 }
-document.querySelector('#my-account').onclick=()=>auth.require(showAccount).catch(err=>notify(err.message,true));document.querySelector('#my-orders').onclick=()=>auth.require(showOrders).catch(err=>notify(err.message,true));
+document.querySelector('#my-account').onclick=()=>{customerCenter.close();auth.require(showAccount).catch(err=>notify(err.message,true));};
+document.querySelector('#my-orders').onclick=()=>{customerCenter.close();auth.require(showOrders).catch(err=>notify(err.message,true));};
 window.addEventListener('storage',event=>{if(event.key===CART_KEY){cart=readCart(localStorage,products.map(p=>p.id));updateCartCount();if(cartDialog.open)renderCart();}});
 persist();refreshCatalog().catch(err=>{storeInfo.textContent='Pedidos online temporariamente indisponíveis. Fale com o atendimento.';notify(err.message,true);});
