@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#d91a43">
+  <meta name="description" content="Cones de morango e maracujá da Q’Cone. Veja as fotos, escolha a quantidade e monte sua encomenda.">
+  <title>Q’Cone — Encomendas</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./config.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <div class="site">
+    <header class="header">
+      <a class="logo" href="#inicio" aria-label="Q’Cone, início">Q’Cone</a>
+      <span>Cones por encomenda</span>
+    </header>
+    <main id="inicio">
+      <h1 class="catalog-title">Cones por encomenda</h1>
+      <div id="catalog"></div>
+      <noscript><p class="no-script">Ative o JavaScript do navegador para ver as fotos e montar sua encomenda.</p></noscript>
+    </main>
+    <footer class="footer"><span>Q’Cone</span><span>Pedidos por encomenda.</span></footer>
+  </div>
+
+  <dialog class="order-dialog" id="order-dialog" aria-labelledby="order-title">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <h2 id="order-title">Sua encomenda</h2>
+        <button class="close-button" type="button" aria-label="Fechar encomenda"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <p class="dialog-intro">Copie o pedido e envie no direct da Q’Cone.</p>
+      <div class="order-item">
+        <img id="order-image" alt="">
+        <div><h3 id="order-product"></h3><p id="order-quantity"></p></div>
+        <strong id="order-total"></strong>
+      </div>
+      <textarea class="order-message" id="order-message" readonly aria-label="Mensagem da encomenda" rows="7"></textarea>
+      <button class="order-button copy-button" id="copy-order" type="button">Copiar pedido</button>
+      <p class="copy-status" id="copy-status" role="status">A encomenda fica confirmada depois da resposta da Q’Cone.</p>
+      <a class="instagram-link" id="order-instagram" target="_blank" rel="noopener noreferrer" hidden>Abrir Instagram da Q’Cone</a>
+    </div>
+  </dialog>
+</body>
+</html>
