@@ -5,7 +5,7 @@
 .cart-button .cart-badge{position:absolute;top:-1px;right:-4px;display:grid;place-items:center;min-width:20px;height:20px;margin:0;padding:0 5px;border:2px solid var(--bg,#fbf9f5);border-radius:999px;background:var(--red,#d91a43);color:#fff;font:700 10px/1 Arial,sans-serif;font-variant-numeric:tabular-nums}
 .cart-product-photo{flex:none;width:64px;height:80px;border-radius:12px;object-fit:cover;object-position:center 55%;background:#f4e8e0}
 .flying-cone{position:fixed;top:0;left:0;width:72px;height:108px;z-index:90;pointer-events:none;will-change:transform,opacity;contain:layout style paint}
-.flying-cone svg{display:block;width:100%;height:100%}
+.flying-cone>img{display:block;width:100%;height:100%}
 @media(max-width:650px){.header{gap:8px}.delivery-nav{gap:10px;flex-wrap:nowrap}.cart-row{display:grid;grid-template-columns:56px minmax(0,1fr) auto}.cart-row>div{min-width:0}.cart-product-photo{width:56px;height:72px;grid-row:span 2}.cart-row>input{grid-column:3;grid-row:1}.cart-row>strong{grid-column:2}.cart-row>[data-remove]{grid-column:3;font-size:12px}.cart-row .sr-only{position:absolute}}
 @media(prefers-reduced-motion:reduce){.flying-cone{display:none}}
 .header{height:72px;min-height:72px;flex-wrap:nowrap;padding-block:12px;gap:12px}
@@ -18,6 +18,7 @@ html.customer-center-open{overflow:hidden}
 #customer-center{position:fixed;inset:0 0 0 auto;width:min(400px,100%);max-width:100%;height:100dvh;max-height:100dvh;margin:0;border:0;border-left:1px solid var(--line);border-radius:0;overflow-y:auto;overscroll-behavior:contain;box-shadow:-16px 0 48px #312b2c14}
 #customer-center>.dialog-content{min-height:100%;padding:calc(28px + env(safe-area-inset-top)) calc(24px + env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom)) 24px}
 #customer-center .dialog-header{padding-bottom:24px;border-bottom:1px solid var(--line)}
+@media(max-width:650px){#customer-center{width:min(340px,84vw);max-width:84vw}#customer-center>.dialog-content{padding-right:calc(20px + env(safe-area-inset-right));padding-left:20px}#customer-center .dialog-header{gap:12px}#customer-center .dialog-header h2{font-size:20px;letter-spacing:-.3px}#customer-center .close-button{flex:none}.customer-center-action{padding:16px;gap:12px}}
 #customer-center::backdrop{background:#20161a66;animation:customer-center-shade-in .42s ease both}
 #customer-center[data-closing]::backdrop{animation:customer-center-shade-out .28s ease both}
 @keyframes customer-center-shade-in{from{opacity:0}to{opacity:1}}

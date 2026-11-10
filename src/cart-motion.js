@@ -2,10 +2,18 @@
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const flights = new Set();
 const arrivals = new WeakMap();
+// Preparar as duas figuras pequenas antes do primeiro clique, sem baixar fotos.
+if (!motion.matches) {
+  for (const flavor of ['morango', 'maracuja']) {
+    const image = new Image();
+    image.src = `./assets/images/cone-flight-${flavor}.svg`;
+    image.decode().catch(() => {});
+  }
+}
 
 function coneIcon(flavor) {
-  const topping = flavor === 'maracuja' ? '#f5bd00' : '#e52950';
-  return `<svg viewBox="0 0 80 120" fill="none" aria-hidden="true"><path d="M17 48 40 114 63 48Z" fill="#d9974f" stroke="#975c2c" stroke-width="2"/><path d="m23 60 29 20M27 75l20 14M32 89l11 8M57 60 29 80M52 76 34 90M47 91l-9 7" stroke="#f5cd88" stroke-width="2"/><path d="M16 48c-8-9-2-20 4-23C19 12 30 5 40 9c12-5 23 5 22 16 9 5 12 16 3 24-4 5-9-1-12 1-5 3-6 16-12 12-5-3-1-13-8-13-5 0-9 9-13 6Z" fill="#fff1cc" stroke="#d9b781" stroke-width="2"/><g fill="${topping}"><path d="m24 23 7-5 4 8-8 4zM44 17l9 3-3 9-7-4zM52 34l8-3 3 8-8 3zM30 38l7-5 5 8-8 5zM17 35l5-3 3 6-5 3z"/></g>${flavor === 'maracuja' ? '<g fill="#684021"><ellipse cx="39" cy="23" rx="1.5" ry="2"/><ellipse cx="48" cy="37" rx="1.5" ry="2"/><ellipse cx="26" cy="32" rx="1.5" ry="2"/></g>' : ''}</svg>`;
+  const variant = flavor === 'maracuja' ? 'maracuja' : 'morango';
+  return `<img src="./assets/images/cone-flight-${variant}.svg" alt="" width="72" height="108" decoding="async" draggable="false">`;
 }
 
 export function cancelCartFlights() {
